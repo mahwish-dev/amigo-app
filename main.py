@@ -7,6 +7,10 @@ from kivymd.uix.button import MDRectangleFlatButton
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
+from kivy.uix.checkbox import CheckBox
+from decouple import config
+
+WEATHER_API_KEY = config('WEATHER_API_KEY')
 
 Window.size = (640/1.5, 1260/1.5)
 
@@ -145,13 +149,24 @@ ScreenManager:
 
 <TestScreen>:
     name: 'profile'
-    MDLabel:
-        text: 'Profile'
-        halign: 'center'
-    MDRectangleFlatButton:
-        text: 'Back'
-        pos_hint: {'center_x':0.5,'center_y':0.1}
-        on_press: root.manager.current = 'menu'
+    canvas.before:
+        Color:
+            rgba: 	58/255, 59/255, 60/255,  1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    ScrollView:
+        GridLayout:
+            cols: 1
+            padding: 20
+            # spacing: 30
+            height: self.minimum_height + 50
+            CheckBox:
+                # height: 50
+                # active: True
+                on_active: print(self.parent.minimum_height)
+                
+            
 """
 
 
@@ -160,7 +175,11 @@ class MenuScreen(Screen):
 
 
 class TestScreen(Screen):
-    pass
+    def checkbox_click(self, instance, value):
+        if value is True:
+            print("Checkbox Checked")
+        else:
+            print("Checkbox Unchecked")
 
 
 # Create the screen manager
